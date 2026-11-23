@@ -1,0 +1,16 @@
+{
+  "name": "@pw-trainer/tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.7.5",
+    "typescript": "^5.6.3"
+  }
+}

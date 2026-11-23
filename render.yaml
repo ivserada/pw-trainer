@@ -1,0 +1,21 @@
+# Инфраструктура как код для Render.com
+# Render подхватывает этот файл автоматически при подключении репозитория.
+services:
+  - type: web
+    name: pw-trainer
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: '3000'
+      - key: HOST
+        value: 0.0.0.0
+      - key: ENABLE_TEST_API
+        value: 'true'
+      - key: CLIENT_DIST
+        value: /app/client/dist
+      - key: JWT_SECRET
+        generateValue: true
