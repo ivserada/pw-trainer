@@ -1,7 +1,29 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api } from '../api/client'
 import { TASK_SECTIONS, type Level } from '../data/tasks'
+import { useI18n } from '../i18n'
+
+const PROGRESS_KEY = 'practice:done'
+
+function readProgress(): Record<string, boolean> {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY)
+    if (!raw) return {}
+    const parsed = JSON.parse(raw)
+    if (parsed && typeof parsed === 'object') return parsed as Record<string, boolean>
+    return {}
+  } catch {
+    return {}
+  }
+}
+
+function writeProgress(tasks: Record<string, boolean>): void {
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(tasks))
+  } catch {
+    /* localStorage может быть недоступен (private mode) — прогресс просто не сохранится */
+  }
+}
 
 const LEVEL_CLASS: Record<Level, string> = {
   '🟢': 'level-chip--green',
@@ -10,28 +32,29 @@ const LEVEL_CLASS: Record<Level, string> = {
 }
 
 export function PracticePage() {
-  const [done, setDone] = useState<Record<string, boolean>>({})
+  const { lang, t } = useI18n()
+  const [done, setDone] = useState<Record<string, boolean>>(() => readProgress())
   const [filter, setFilter] = useState<'all' | Level>('all')
 
   useEffect(() => {
-    api
-      .get<{ doneCount: number; tasks: Record<string, boolean> }>('/api/practice/progress')
-      .then((p) => setDone(p.tasks))
-      .catch(() => {})
+    const onReset = () => {
+      try {
+        localStorage.removeItem(PROGRESS_KEY)
+      } catch {
+        /* ignore */
+      }
+      setDone({})
+    }
+    window.addEventListener('pw:reset', onReset)
+    return () => window.removeEventListener('pw:reset', onReset)
   }, [])
 
-  const toggle = async (id: string) => {
-    const next = !done[id]
-    setDone((prev) => ({ ...prev, [id]: next }))
-    try {
-      const res = await api.post<{ tasks: Record<string, boolean> }>('/api/practice/progress', {
-        id,
-        done: next,
-      })
-      setDone(res.tasks)
-    } catch {
-      setDone((prev) => ({ ...prev, [id]: !next }))
-    }
+  const toggle = (id: string) => {
+    setDone((prev) => {
+      const next = { ...prev, [id]: !prev[id] }
+      writeProgress(next)
+      return next
+    })
   }
 
   const total = useMemo(() => TASK_SECTIONS.reduce((sum, s) => sum + s.tasks.length, 0), [])
@@ -50,20 +73,20 @@ export function PracticePage() {
       <div className="practice-layout">
         <aside className="practice-side">
           <div className="card" style={{ padding: '0.9rem' }}>
-            <h2 style={{ fontSize: '1rem', marginTop: 0 }}>Разделы</h2>
-            <nav aria-label="Разделы практики">
+            <h2 style={{ fontSize: '1rem', marginTop: 0 }}>{t('practice.sections')}</h2>
+            <nav aria-label={t('practice.navLabel')}>
               {TASK_SECTIONS.map((s) => (
                 <a key={s.id} href={`#section-${s.id}`}>
-                  {s.title}
+                  {s.title[lang]}
                 </a>
               ))}
-              <a href="/practice/chaos">🌀 Chaos-режим</a>
+              <a href="/practice/chaos">{t('practice.chaosLink')}</a>
             </nav>
             <hr
               style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '0.75rem 0' }}
             />
             <p className="muted" style={{ margin: 0, fontSize: '0.85rem' }}>
-              Прогресс:{' '}
+              {t('practice.progress')}{' '}
               <strong data-testid="progress-count">
                 {doneCount}/{total}
               </strong>
@@ -94,17 +117,13 @@ export function PracticePage() {
         </aside>
 
         <div>
-          <h1>Практика</h1>
-          <p className="muted">
-            {total} заданий с подсказками-спойлерами. Отмечайте выполненное — прогресс хранится на
-            сервере (<code>GET /api/practice/progress</code>). Сброс данных кнопкой «Сбросить
-            данные» обнуляет и прогресс.
-          </p>
+          <h1>{t('practice.title')}</h1>
+          <p className="muted">{t('practice.intro', { total })}</p>
 
           <div
             className="row"
             role="group"
-            aria-label="Фильтр по уровню"
+            aria-label={t('practice.filterLabel')}
             style={{ marginBottom: '1rem' }}
           >
             {(['all', '🟢', '🟡', '🔴'] as const).map((f) => (
@@ -116,14 +135,14 @@ export function PracticePage() {
                 onClick={() => setFilter(f)}
                 data-testid={`filter-${f === 'all' ? 'all' : f}`}
               >
-                {f === 'all' ? 'Все' : `${f} уровень`}
+                {f === 'all' ? t('practice.filterAll') : t('practice.filterLevel', { emoji: f })}
               </button>
             ))}
           </div>
 
           {visibleSections.map((section) => (
             <section key={section.id} id={`section-${section.id}`} style={{ marginBottom: '2rem' }}>
-              <h2>{section.title}</h2>
+              <h2>{section.title[lang]}</h2>
               {section.tasks.map((task) => {
                 const isDone = Boolean(done[task.id])
                 return (
@@ -137,7 +156,7 @@ export function PracticePage() {
                       <span className="row" style={{ gap: '0.5rem' }}>
                         <span
                           className={`level-chip ${LEVEL_CLASS[task.level]}`}
-                          aria-label={`Уровень ${task.level}`}
+                          aria-label={t('practice.levelAria', { level: task.level })}
                         >
                           {task.level}
                         </span>
@@ -146,7 +165,7 @@ export function PracticePage() {
                             isDone ? { textDecoration: 'line-through', opacity: 0.65 } : undefined
                           }
                         >
-                          {task.title}
+                          {task.title[lang]}
                         </span>
                       </span>
                       <span className="row" style={{ gap: '0.6rem' }}>
@@ -160,15 +179,15 @@ export function PracticePage() {
                           <input
                             type="checkbox"
                             checked={isDone}
-                            onChange={() => void toggle(task.id)}
+                            onChange={() => toggle(task.id)}
                             data-testid={`done-${task.id}`}
                           />
-                          ✅ выполнено
+                          {`✅ ${t('practice.done')}`}
                         </label>
                       </span>
                     </div>
                     <details className="spoiler">
-                      <summary>Подсказка: {task.hint}</summary>
+                      <summary>{t('practice.hint')} {task.hint[lang]}</summary>
                       <pre
                         className="mono"
                         style={{ margin: '0.5rem 0 0', whiteSpace: 'pre-wrap', fontSize: '0.8rem' }}

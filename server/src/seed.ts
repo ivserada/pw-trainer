@@ -296,7 +296,6 @@ export function seedDatabase(): DB {
       { code: 'PW20', percent: 20 },
     ],
     flags: { ...DEFAULT_FLAGS },
-    practice: {},
     refreshTokens: new Map(),
     orderSeq: 11,
   }

@@ -9,9 +9,8 @@ test.describe('📋 Практика и сервисные эндпоинты', 
 
     await page.getByTestId('done-loc-01').check()
     await expect(page.getByTestId('progress-count')).toHaveText('1/85')
-    const progress = await page.request.get('/api/practice/progress')
-    const body = (await progress.json()) as { doneCount: number }
-    expect(body.doneCount).toBe(1)
+    const stored = await page.evaluate(() => localStorage.getItem('practice:done'))
+    expect(JSON.parse(stored ?? 'null')).toEqual({ 'loc-01': true })
   })
 
   test('спойлер раскрывает рекомендуемый локатор', async ({ page }) => {
@@ -30,13 +29,15 @@ test.describe('📋 Практика и сервисные эндпоинты', 
     expect(Object.keys(json.paths).length).toBeGreaterThan(20)
   })
 
-  test('reset: состояние возвращается к seed', async ({ page, api }) => {
+  test('reset: состояние возвращается к seed, прогресс очищается', async ({ page, api }) => {
     await page.goto('/practice')
     await page.getByTestId('done-loc-01').check()
     await expect(page.getByTestId('progress-count')).toHaveText('1/85')
     await api.post('/api/test/reset')
-    await page.reload()
+    await page.getByTestId('reset-button').click()
     await expect(page.getByTestId('progress-count')).toHaveText('0/85')
+    const stored = await page.evaluate(() => localStorage.getItem('practice:done'))
+    expect(stored).toBeNull()
   })
 })
 

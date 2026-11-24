@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { ApiError, api, type User } from '../api/client'
 import { useAuth } from '../contexts/AuthContext'
 import { Spinner, useToast } from '../components/ui'
+import { useI18n } from '../i18n'
 
 /**
  * 🔴 /admin — панель управления: статистика, CRUD товаров и виртуальная таблица
@@ -51,6 +52,7 @@ function buildSyntheticRows(): Row[] {
 export function AdminPage() {
   const { user, loading } = useAuth()
   const toast = useToast()
+  const { t } = useI18n()
   const [stats, setStats] = useState<Stats | null>(null)
   const [users, setUsers] = useState<User[] | null>(null)
   const [rows, setRows] = useState<Row[]>([])
@@ -75,7 +77,7 @@ export function AdminPage() {
 
   useEffect(() => {
     if (!canManage) return
-    void reload().catch(() => toast('error', 'Нет доступа к админке'))
+    void reload().catch(() => toast('error', t('admin.toast.noAccess')))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canManage])
 
@@ -145,11 +147,11 @@ export function AdminPage() {
         stock: Number(fd.get('stock')),
       })
       setRows((prev) => [{ ...created, synthetic: false }, ...prev])
-      toast('success', `Создан товар ${created.id}`)
+      toast('success', t('admin.crud.created', { id: created.id }))
       e.currentTarget.reset()
       void reload()
     } catch (err) {
-      toast('error', err instanceof ApiError ? (err.data.message as string) : 'Ошибка создания')
+      toast('error', err instanceof ApiError ? (err.data.message as string) : t('admin.toast.createError'))
     }
   }
 
@@ -165,9 +167,9 @@ export function AdminPage() {
         patch,
       )
       setRows((prev) => prev.map((r) => (r.id === selected.id ? { ...r, ...updated } : r)))
-      toast('success', 'Сохранено через API')
+      toast('success', t('admin.toast.saved'))
     } catch (err) {
-      toast('error', err instanceof ApiError ? (err.data.message as string) : 'Ошибка сохранения')
+      toast('error', err instanceof ApiError ? (err.data.message as string) : t('admin.toast.saveError'))
     }
   }
 
@@ -182,20 +184,19 @@ export function AdminPage() {
       await api.del(`/api/admin/products/${selected.id}`)
       setRows((prev) => prev.filter((r) => r.id !== selected.id))
       setSelectedId(null)
-      toast('success', 'Товар удалён')
+      toast('success', t('admin.toast.deleted'))
       void reload()
     } catch (err) {
-      toast('error', err instanceof ApiError ? (err.data.message as string) : 'Ошибка удаления')
+      toast('error', err instanceof ApiError ? (err.data.message as string) : t('admin.toast.deleteError'))
     }
   }
 
   return (
     <div className="page">
-      <h1>Админка</h1>
+      <h1>{t('admin.title')}</h1>
       <p className="muted">
-        Роль: <span className="badge">{user!.role}</span>. Виртуальная таблица:{' '}
-        {rows.length.toLocaleString('ru-RU')} строк (первые 64 — реальные товары, дальше синтетика
-        для нагрузки).
+        {t('admin.role')}: <span className="badge">{user!.role}</span>.{' '}
+        {t('admin.intro', { count: rows.length.toLocaleString('ru-RU') })}
       </p>
 
       <section className="row" style={{ alignItems: 'stretch' }} data-testid="admin-stats">
@@ -203,12 +204,12 @@ export function AdminPage() {
           <>
             {(
               [
-                ['Товары', stats.products],
-                ['Пользователи', stats.users],
-                ['Заказы', stats.orders],
-                ['Выручка, ₽', Math.round(stats.revenueCents / 100)],
-                ['Мало остатков', stats.lowStock],
-                ['Out of stock', stats.outOfStock],
+                [t('admin.stat.products'), stats.products],
+                [t('admin.stat.users'), stats.users],
+                [t('admin.stat.orders'), stats.orders],
+                [t('admin.stat.revenue'), Math.round(stats.revenueCents / 100)],
+                [t('admin.stat.lowStock'), stats.lowStock],
+                [t('admin.stat.outOfStock'), stats.outOfStock],
               ] as const
             ).map(([label, value]) => (
               <div key={label} className="card" style={{ minWidth: '130px', flex: 1 }}>
@@ -235,15 +236,15 @@ export function AdminPage() {
           style={{ marginTop: '1rem' }}
           data-testid="admin-users"
         >
-          <h2>Пользователи</h2>
+          <h2>{t('admin.users.title')}</h2>
           <div className="table-wrap">
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">Имя</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Роль</th>
-                  <th scope="col">2FA</th>
+                  <th scope="col">{t('admin.users.name')}</th>
+                  <th scope="col">{t('admin.users.email')}</th>
+                  <th scope="col">{t('admin.col.role')}</th>
+                  <th scope="col">{t('admin.users.otp')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -264,7 +265,7 @@ export function AdminPage() {
       ) : null}
 
       <section className="card card--pad-lg" style={{ marginTop: '1rem' }} data-testid="admin-crud">
-        <h2>CRUD товаров</h2>
+        <h2>{t('admin.crud.title')}</h2>
         <form
           className="row"
           style={{ alignItems: 'flex-end' }}
@@ -272,7 +273,7 @@ export function AdminPage() {
           data-testid="create-product-form"
         >
           <div className="field" style={{ margin: 0 }}>
-            <label htmlFor="np-name">Название</label>
+            <label htmlFor="np-name">{t('admin.crud.name')}</label>
             <input
               id="np-name"
               name="name"
@@ -283,7 +284,7 @@ export function AdminPage() {
             />
           </div>
           <div className="field" style={{ margin: 0 }}>
-            <label htmlFor="np-price">Цена, ₽</label>
+            <label htmlFor="np-price">{t('admin.crud.price')}</label>
             <input
               id="np-price"
               name="price"
@@ -296,7 +297,7 @@ export function AdminPage() {
             />
           </div>
           <div className="field" style={{ margin: 0 }}>
-            <label htmlFor="np-stock">Остаток</label>
+            <label htmlFor="np-stock">{t('admin.crud.stock')}</label>
             <input
               id="np-stock"
               name="stock"
@@ -308,7 +309,7 @@ export function AdminPage() {
             />
           </div>
           <button type="submit" className="btn btn--primary" data-testid="np-create">
-            Создать
+            {t('admin.crud.submit')}
           </button>
         </form>
 
@@ -319,11 +320,11 @@ export function AdminPage() {
             data-testid="edit-selected"
           >
             <span>
-              Выбран: <code data-testid="selected-id">{selected.id}</code>
-              {selected.synthetic ? <span className="badge badge--warning">синтетика</span> : null}
+              {t('admin.crud.selected', { id: selected.id })}
+              {selected.synthetic ? <span className="badge badge--warning">{t('admin.crud.synthetic')}</span> : null}
             </span>
             <div className="field" style={{ margin: 0 }}>
-              <label htmlFor="sel-price">Цена, ₽</label>
+              <label htmlFor="sel-price">{t('admin.crud.price')}</label>
               <input
                 id="sel-price"
                 type="number"
@@ -337,7 +338,7 @@ export function AdminPage() {
               />
             </div>
             <div className="field" style={{ margin: 0 }}>
-              <label htmlFor="sel-stock">Остаток</label>
+              <label htmlFor="sel-stock">{t('admin.crud.stock')}</label>
               <input
                 id="sel-stock"
                 type="number"
@@ -354,7 +355,7 @@ export function AdminPage() {
               onClick={() => void deleteSelected()}
               data-testid="sel-delete"
             >
-              Удалить
+              {t('admin.crud.delete')}
             </button>
           </div>
         ) : null}
@@ -362,18 +363,18 @@ export function AdminPage() {
 
       <section style={{ marginTop: '1rem' }} data-testid="virtual-table-section">
         <div className="row" style={{ justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-          <h2 style={{ margin: 0 }}>Виртуальная таблица</h2>
+          <h2 style={{ margin: 0 }}>{t('admin.vt.title')}</h2>
           <div className="row">
             <input
               className="input"
               style={{ width: '220px' }}
-              placeholder="Фильтр по названию/id…"
+              placeholder={t('admin.vt.filterPh')}
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value)
                 scrollRef.current?.scrollTo({ top: 0 })
               }}
-              aria-label="Фильтр таблицы"
+              aria-label={t('admin.vt.filter')}
               data-testid="vt-filter"
             />
             <button
@@ -382,7 +383,7 @@ export function AdminPage() {
               onClick={() => setSortAsc((s) => !s)}
               data-testid="vt-sort"
             >
-              Цена {sortAsc ? '↑' : '↓'}
+              {t('admin.vt.price')} {sortAsc ? '↑' : '↓'}
             </button>
           </div>
         </div>
@@ -391,14 +392,14 @@ export function AdminPage() {
             <thead>
               <tr>
                 <th scope="col" style={{ width: '90px' }}>
-                  id
+                  {t('admin.col.id')}
                 </th>
-                <th scope="col">Название</th>
+                <th scope="col">{t('admin.col.name')}</th>
                 <th scope="col" style={{ width: '120px' }}>
-                  Цена, ₽
+                  {t('admin.vt.price')}
                 </th>
                 <th scope="col" style={{ width: '90px' }}>
-                  Остаток
+                  {t('admin.col.stock')}
                 </th>
               </tr>
             </thead>
@@ -448,8 +449,11 @@ export function AdminPage() {
             style={{ padding: '0.4rem 0.8rem', margin: 0 }}
             data-testid="vt-info"
           >
-            строк: {filtered.length.toLocaleString('ru-RU')} · видно {visibleRange.start + 1}–
-            {visibleRange.end}
+            {t('admin.vt.info', {
+              count: filtered.length.toLocaleString('ru-RU'),
+              from: visibleRange.start + 1,
+              to: visibleRange.end,
+            })}
           </p>
         </div>
       </section>

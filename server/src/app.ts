@@ -14,7 +14,6 @@ import { registerDemoRoutes } from './routes/demo.js'
 import { registerFileRoutes } from './routes/files.js'
 import { registerMetaRoutes } from './routes/meta.js'
 import { registerOrderRoutes } from './routes/orders.js'
-import { registerPracticeRoutes } from './routes/practice.js'
 import { registerProductRoutes } from './routes/products.js'
 import { registerRealtimeRoutes } from './routes/realtime.js'
 import { registerTestRoutes } from './routes/test.js'
@@ -51,7 +50,6 @@ export async function buildApp() {
   registerOrderRoutes(app)
   registerUserRoutes(app)
   registerDemoRoutes(app)
-  registerPracticeRoutes(app)
   registerFileRoutes(app)
   registerRealtimeRoutes(app)
 

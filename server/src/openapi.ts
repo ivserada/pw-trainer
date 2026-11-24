@@ -17,7 +17,6 @@ export const openapi = {
     { name: 'realtime' },
     { name: 'files' },
     { name: 'demo' },
-    { name: 'practice' },
     { name: 'test' },
   ],
   components: {
@@ -407,18 +406,6 @@ export const openapi = {
         tags: ['demo'],
         summary: 'Пустой список',
         responses: { 200: { description: '{ items: [] }' } },
-      },
-    },
-    '/api/practice/progress': {
-      get: {
-        tags: ['practice'],
-        summary: 'Прогресс практики { total, done, items }',
-        responses: { 200: { description: 'progress' } },
-      },
-      post: {
-        tags: ['practice'],
-        summary: 'Отметить задание { id, done }',
-        responses: { 200: { description: 'progress' } },
       },
     },
     '/api/test/reset': {

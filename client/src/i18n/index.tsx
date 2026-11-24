@@ -153,6 +153,84 @@ const ru = {
   'account.invoice': 'Счёт',
   'account.2fa': 'Двухфакторная авторизация',
   'account.needLogin': 'Чтобы войти в кабинет, авторизуйтесь.',
+  'account.profileSaved': 'Профиль сохранён',
+  'status.pending': 'Ожидает обработки',
+  'status.processing': 'В обработке',
+  'status.shipped': 'Отправлен',
+  'status.delivered': 'Доставлен',
+  'status.unknown': 'Неизвестно',
+  'auth.error2fa': 'Не удалось запросить 2FA',
+  'admin.title': 'Админка — Playwright Practice Shop',
+  'admin.tab.customers': 'Покупатели',
+  'admin.tab.users': 'Пользователи',
+  'admin.tab.invoices': 'Счета',
+  'admin.col.status': 'Статус',
+  'admin.col.role': 'Роль',
+  'admin.col.created': 'Создан',
+  'admin.col.id': 'ID',
+  'admin.col.name': 'Название',
+  'admin.col.stock': 'Остаток',
+  'admin.newStatus': 'Новый статус',
+  'admin.no': '№',
+  'admin.items': 'Товары',
+  'admin.qty': 'Кол-во',
+  'admin.searchUsers': 'Поиск по id/email',
+  'admin.order': 'Заказать',
+  'admin.orderStatuses': 'Статусы заказов',
+  'admin.searchInvoices': 'Поиск по №',
+  'admin.orderNo': '№ заказа',
+  'admin.col.order': 'Заказ',
+  'admin.role': 'Роль',
+  'admin.intro': 'Виртуальная таблица: {count} строк (первые 64 — реальные, дальше синтетика).',
+  'admin.stat.products': 'Товары',
+  'admin.stat.users': 'Пользователи',
+  'admin.stat.orders': 'Заказы',
+  'admin.stat.revenue': 'Выручка, ₽',
+  'admin.stat.lowStock': 'Мало остатков',
+  'admin.stat.outOfStock': 'Out of stock',
+  'admin.users.title': 'Пользователи',
+  'admin.users.name': 'Имя',
+  'admin.users.email': 'Email',
+  'admin.users.otp': '2FA',
+  'admin.crud.title': 'CRUD товаров',
+  'admin.crud.name': 'Название',
+  'admin.crud.price': 'Цена, ₽',
+  'admin.crud.stock': 'Остаток',
+  'admin.crud.submit': 'Создать',
+  'admin.crud.selected': 'Выбран: {id}',
+  'admin.crud.synthetic': 'синтетика',
+  'admin.crud.delete': 'Удалить',
+  'admin.crud.created': 'Создан товар {id}',
+  'admin.toast.noAccess': 'Нет доступа к админке',
+  'admin.toast.createError': 'Ошибка создания',
+  'admin.toast.saved': 'Сохранено через API',
+  'admin.toast.saveError': 'Ошибка сохранения',
+  'admin.toast.deleted': 'Товар удалён',
+  'admin.toast.deleteError': 'Ошибка удаления',
+  'admin.vt.title': 'Виртуальная таблица',
+  'admin.vt.filter': 'Фильтр таблицы',
+  'admin.vt.filterPh': 'Фильтр по названию/id…',
+  'admin.vt.sort': 'Цена',
+  'admin.vt.id': 'id',
+  'admin.vt.name': 'Название',
+  'admin.vt.price': 'Цена, ₽',
+  'admin.vt.stock': 'Остаток',
+  'admin.vt.info': 'строк: {count} · видно {from}–{to}',
+  'practice.title': 'Практика',
+  'practice.intro':
+    '{total} заданий с подсказками-спойлерами. Отмечайте выполненное — прогресс хранится локально в вашем браузере (localStorage). Кнопка «Сбросить данные» также обнуляет прогресс.',
+  'practice.sections': 'Разделы',
+  'practice.navLabel': 'Разделы практики',
+  'practice.chaosLink': '🌀 Chaos-режим',
+  'practice.progress': 'Прогресс:',
+  'practice.filterLabel': 'Фильтр по уровню',
+  'practice.filterAll': 'Все',
+  'practice.filterLevel': '{emoji} уровень',
+  'practice.done': 'выполнено',
+  'practice.hint': 'Подсказка:',
+  'practice.levelAria': 'Уровень {level}',
+  'common.actions': 'Действия',
+  'common.id': 'ID',
 }
 
 export type DictKey = keyof typeof ru
@@ -308,6 +386,84 @@ const en: Record<DictKey, string> = {
   'account.invoice': 'Invoice',
   'account.2fa': 'Two-factor authentication',
   'account.needLogin': 'Sign in to access your account.',
+  'account.profileSaved': 'Profile saved',
+  'status.pending': 'Pending',
+  'status.processing': 'Processing',
+  'status.shipped': 'Shipped',
+  'status.delivered': 'Delivered',
+  'status.unknown': 'Unknown',
+  'auth.error2fa': 'Could not request 2FA',
+  'admin.title': 'Admin — Playwright Practice Shop',
+  'admin.tab.customers': 'Customers',
+  'admin.tab.users': 'Users',
+  'admin.tab.invoices': 'Invoices',
+  'admin.col.status': 'Status',
+  'admin.col.role': 'Role',
+  'admin.col.created': 'Created',
+  'admin.col.id': 'ID',
+  'admin.col.name': 'Name',
+  'admin.col.stock': 'Stock',
+  'admin.newStatus': 'New status',
+  'admin.no': '#',
+  'admin.items': 'Items',
+  'admin.qty': 'Qty',
+  'admin.searchUsers': 'Search by id/email',
+  'admin.order': 'Order',
+  'admin.orderStatuses': 'Order statuses',
+  'admin.searchInvoices': 'Search by #',
+  'admin.orderNo': 'Order #',
+  'admin.col.order': 'Order',
+  'admin.role': 'Role',
+  'admin.intro': 'Virtual table: {count} rows (first 64 real, rest synthetic).',
+  'admin.stat.products': 'Products',
+  'admin.stat.users': 'Users',
+  'admin.stat.orders': 'Orders',
+  'admin.stat.revenue': 'Revenue, ₽',
+  'admin.stat.lowStock': 'Low stock',
+  'admin.stat.outOfStock': 'Out of stock',
+  'admin.users.title': 'Users',
+  'admin.users.name': 'Name',
+  'admin.users.email': 'Email',
+  'admin.users.otp': '2FA',
+  'admin.crud.title': 'Product CRUD',
+  'admin.crud.name': 'Name',
+  'admin.crud.price': 'Price, ₽',
+  'admin.crud.stock': 'Stock',
+  'admin.crud.submit': 'Create',
+  'admin.crud.selected': 'Selected: {id}',
+  'admin.crud.synthetic': 'synthetic',
+  'admin.crud.delete': 'Delete',
+  'admin.crud.created': 'Product {id} created',
+  'admin.toast.noAccess': 'No access to admin',
+  'admin.toast.createError': 'Error creating product',
+  'admin.toast.saved': 'Saved via API',
+  'admin.toast.saveError': 'Error saving',
+  'admin.toast.deleted': 'Product deleted',
+  'admin.toast.deleteError': 'Error deleting',
+  'admin.vt.title': 'Virtual table',
+  'admin.vt.filter': 'Table filter',
+  'admin.vt.filterPh': 'Filter by name/id…',
+  'admin.vt.sort': 'Price',
+  'admin.vt.id': 'id',
+  'admin.vt.name': 'Name',
+  'admin.vt.price': 'Price, ₽',
+  'admin.vt.stock': 'Stock',
+  'admin.vt.info': 'rows: {count} · visible {from}–{to}',
+  'practice.title': 'Practice',
+  'practice.intro':
+    '{total} tasks with spoiler hints. Mark what you have done — progress is stored locally in your browser (localStorage). The "Reset data" button also clears progress.',
+  'practice.sections': 'Sections',
+  'practice.navLabel': 'Practice sections',
+  'practice.chaosLink': '🌀 Chaos mode',
+  'practice.progress': 'Progress:',
+  'practice.filterLabel': 'Filter by level',
+  'practice.filterAll': 'All',
+  'practice.filterLevel': '{emoji} level',
+  'practice.done': 'done',
+  'practice.hint': 'Hint:',
+  'practice.levelAria': 'Level {level}',
+  'common.actions': 'Actions',
+  'common.id': 'ID',
 }
 
 const DICTS: Record<Lang, Record<DictKey, string>> = { ru, en }
@@ -315,7 +471,7 @@ const DICTS: Record<Lang, Record<DictKey, string>> = { ru, en }
 interface I18nValue {
   lang: Lang
   setLang: (l: Lang) => void
-  t: (key: DictKey) => string
+  t: (key: DictKey, vars?: Record<string, string | number>) => string
 }
 
 const I18nContext = createContext<I18nValue>({
@@ -332,15 +488,49 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem('lang', lang)
     document.documentElement.lang = lang
+    setLangGlobal(lang)
   }, [lang])
   const value: I18nValue = {
     lang,
     setLang: setLangState,
-    t: (key) => DICTS[lang][key] ?? key,
+    t: (key, vars) => {
+      let str = DICTS[lang][key] ?? key
+      if (vars) {
+        for (const [k, v] of Object.entries(vars)) {
+          str = str.replace(`{${k}}`, String(v))
+        }
+      }
+      return str
+    },
   }
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }
 
 export function useI18n(): I18nValue {
   return useContext(I18nContext)
+}
+
+/** Локализованная строка/объект, выбираемый по текущему языку. */
+export type Localized<S> = { ru: S; en: S }
+
+/**
+ * Удобный хелпер для «контентных» страниц: передаём { ru, en } и получаем
+ * текущий вариант. Типы гарантируют, что ru и en имеют одинаковую форму.
+ * Пример: const s = useL({ ru: { title: 'Заголовок' }, en: { title: 'Title' } })
+ */
+export function useL<S>(strings: Localized<S>): S {
+  const { lang } = useI18n()
+  return strings[lang]
+}
+
+// ---- Non-component (module) localization --------------------------------
+// Modules without access to hooks (api/client, lib/mask, AuthContext, lit/*)
+// resolve {ru,en} strings through getL(), which reads the last lang applied
+// by the I18nProvider (set during render, before DOM paint).
+let _currentLang: Lang = 'ru'
+export function setLangGlobal(lang: Lang) {
+  _currentLang = lang
+}
+export function getL<S>(s: Localized<S>): S {
+  return _currentLang === 'en' ? s.en : s.ru
 }

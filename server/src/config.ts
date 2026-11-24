@@ -1,8 +1,9 @@
 import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 
 const defaultClientDist = fileURLToPath(new URL('../../client/dist', import.meta.url))
 const clientDist = process.env.CLIENT_DIST
-  ? fileURLToPath(new URL(`file://${process.env.CLIENT_DIST.replace(/\/$/, '')}/`))
+  ? resolve(process.cwd(), process.env.CLIENT_DIST)
   : defaultClientDist
 
 export const config = {

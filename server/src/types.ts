@@ -139,7 +139,6 @@ export interface DB {
   files: Map<string, StoredFile>
   promoCodes: PromoCode[]
   flags: ChaosFlags
-  practice: Record<string, boolean>
   refreshTokens: Map<string, { userId: string; expires: number }>
   orderSeq: number
 }

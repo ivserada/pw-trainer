@@ -52,7 +52,7 @@ docker compose up    # всё на http://localhost:3000
 | GET      | `/api/test/otp?email=…` | текущий OTP для 2FA                            |
 | POST     | `/api/test/create-user` | создать пользователя `{email, password, role}` |
 
-Прогресс практики: `GET/POST /api/practice/progress`. OpenAPI: `/api/docs`.
+Прогресс практики хранится локально в браузере (`localStorage`, ключ `practice:done`). OpenAPI: `/api/docs`.
 
 ## Chaos-режим
 
@@ -104,6 +104,7 @@ tests/    Playwright: фикстуры (reset/flags per-test), page objects, с�
    `https://pw-trainer.onrender.com`.
 
 Нюансы бесплатного тарифа:
+
 - Сервис «засыпает» после 15 минут без трафика; первый запрос будит его (~30–60 с).
   Лечится бесплатным монитором вроде UptimeRobot, пингующим `/api/health` раз в 5 минут.
 - WebSocket (чат) и SSE работают из коробки.
